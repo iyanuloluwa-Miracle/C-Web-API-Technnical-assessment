@@ -1,0 +1,113 @@
+# Visual Studio / .NET
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.csproj
+*.csproj.user
+*.sln
+*.pdb
+*.cache
+*.dll
+*.exe
+*.bin
+*.obj
+*.tlog
+*.log
+*.bak
+*.tmp
+*.temp
+*.orig
+
+# Build output directories
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# NuGet Packages
+*.nupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Rider (JetBrains)
+.idea/
+*.sln.iml
+
+# Test results
+TestResults/
+*.trx
+*.xml
+*.coverage
+*.coveragexml
+
+# Azure / Deployment
+*.pubxml
+*.pubxml.user
+*.azurePubxml
+
+# Unity (if applicable)
+Library/
+Temp/
+UnityGenerated/
+*.csproj
+*.sln
+*.unityproj
+*.asset
+
+# Miscellaneous
+*.cache
+*.ilk
+*.meta
+*.pidb
+*.userprefs
+*.usertasks
+*.scc
+*.vs
+*.vsconfig
+*.suo
+*.ncb
+*.gpState
+*.ipch
+*.db
+*.opendb
+*.sdf
+*.cachefile
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Ignore sensitive files
+appsettings.json
+appsettings.*.json
+*.config
+*.config.user
+*.csdef
+*.ccproj
+*.ccdef
+*.cscfg
+*.csx
+*.csxproj
+*.csxproj.user
+
+# Logs
+*.log
+logs/
+log/
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Other
+Thumbs.db
+.DS_Store
+*.swp
+*~
+*.lock
