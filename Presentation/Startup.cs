@@ -26,11 +26,35 @@ namespace Presentation
         public void ConfigureServices(IServiceCollection services)
         {
             // Add services to the container
-            services.AddControllers();
+            services.AddControllers()
+                .ConfigureApplicationPartManager(manager => 
+                {
+                    // Clear all existing ApplicationParts
+                    var parts = manager.ApplicationParts.ToList();
+                    foreach (var part in parts)
+                    {
+                        manager.ApplicationParts.Remove(part);
+                    }
+                    
+                    // Add only the Presentation assembly
+                    manager.ApplicationParts.Add(new Microsoft.AspNetCore.Mvc.ApplicationParts.AssemblyPart(typeof(Startup).Assembly));
+                });
+                
             services.AddEndpointsApiExplorer();
 
-            // Add Swagger
-            services.AddSwaggerGen();
+            // Add Swagger with version configuration
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Title = "stackbuld API",
+                    Version = "v1",
+                    Description = "A simple API for managing products and orders"
+                });
+                
+                // Add a custom operation filter to resolve conflicts
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+            });
 
             // Configure API versioning
             services.AddApiVersioning(options =>
@@ -64,7 +88,11 @@ namespace Presentation
             if (env.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c => 
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "stackbuld API v1");
+                    c.RoutePrefix = "swagger";
+                });
                 
                 // Apply migrations and seed data in development
                 using (var scope = app.ApplicationServices.CreateScope())
