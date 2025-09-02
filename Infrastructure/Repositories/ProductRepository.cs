@@ -3,7 +3,7 @@ using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Infrastructure.Data; // Add this line if AppDbContext is in Infrastructure.Data namespace
+using Infrastructure.Persistence;
 
 namespace Infrastructure.Repositories;
 
