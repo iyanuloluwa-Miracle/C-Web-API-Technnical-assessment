@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Application.Services;
 using Application.DTOs;
+using System;
 using System.Threading.Tasks;
-// Removed unused using directive for EntityFrameworkCore.Storage
+using System.Collections.Generic;
 
 namespace Presentation.Controllers;
 
@@ -12,18 +12,43 @@ namespace Presentation.Controllers;
 [ApiVersion("1.0")]
 public class OrdersController : ControllerBase
 {
-    private readonly ProductService _service;
+    private readonly OrderService _orderService;
 
-    public OrdersController(ProductService service)
+    public OrdersController(OrderService orderService)
     {
-        _service = service;
+        _orderService = orderService;
     }
 
     [HttpPost("place")]
     public async Task<ActionResult> PlaceOrder([FromBody] PlaceOrderDto order)
     {
-        var success = await _service.PlaceOrderAsync(order);
-        if (!success) return BadRequest("Insufficient stock for one or more products.");
-        return Ok("Order placed successfully.");
+        try
+        {
+            var orderId = await _orderService.PlaceOrderAsync(order);
+            return Ok(new { OrderId = orderId, Message = "Order placed successfully." });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet]
+    public async Task<ActionResult> GetAllOrders()
+    {
+        var orders = await _orderService.GetAllOrdersAsync();
+        return Ok(orders);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult> GetOrderById(int id)
+    {
+        var order = await _orderService.GetOrderByIdAsync(id);
+        if (order == null) return NotFound();
+        return Ok(order);
     }
 }
