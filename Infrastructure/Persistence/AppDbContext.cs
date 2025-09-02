@@ -13,9 +13,12 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Configure Product entity with numeric version for concurrency
         modelBuilder.Entity<Product>()
-            .Property(p => p.RowVersion)
-            .IsRowVersion(); // Concurrency token
+            .Property(p => p.Version)
+            .IsConcurrencyToken()
+            .ValueGeneratedOnAddOrUpdate()
+            .HasDefaultValue(0);
 
         modelBuilder.Entity<OrderItem>()
             .HasOne(oi => oi.Order)

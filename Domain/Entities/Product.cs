@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities;
 
@@ -9,5 +10,8 @@ public class Product
     public string Description { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public int StockQuantity { get; set; }
-    public byte[] RowVersion { get; set; } = Array.Empty<byte>(); // For concurrency
+    
+    // Instead of using rowversion, we'll use a simple version number for concurrency in PostgreSQL
+    [ConcurrencyCheck]
+    public int Version { get; set; }
 }

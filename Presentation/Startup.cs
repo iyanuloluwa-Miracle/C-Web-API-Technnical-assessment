@@ -64,11 +64,11 @@ namespace Presentation
                 options.ReportApiVersions = true;
             });
 
-            // Configure DB context with SQLite
+            // Configure DB context with PostgreSQL
             services.AddDbContext<AppDbContext>(options =>
             {
                 var connectionString = Configuration.GetConnectionString("DefaultConnection");
-                options.UseSqlite(connectionString);
+                options.UseNpgsql(connectionString);
             });
 
             // Configure dependency injection
@@ -98,6 +98,8 @@ namespace Presentation
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    
+                    // This will create the database if it doesn't exist and apply any pending migrations
                     dbContext.Database.EnsureCreated();
                 }
             }
