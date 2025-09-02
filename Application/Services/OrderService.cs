@@ -73,46 +73,17 @@ public class OrderService
         }
     }
 
-    public async Task<IEnumerable<dynamic>> GetAllOrdersAsync()
+    public async Task<IEnumerable<OrderDto>> GetAllOrdersAsync()
     {
         var orders = await _unitOfWork.Orders.GetAllAsync();
-        
-        return orders.Select(o => new
-        {
-            o.Id,
-            o.OrderDate,
-            o.Status,
-            Items = o.Items.Select(i => new
-            {
-                ProductId = i.ProductId,
-                ProductName = i.Product.Name,
-                i.Quantity,
-                i.UnitPrice,
-                TotalPrice = i.Quantity * i.UnitPrice
-            }),
-            TotalAmount = o.Items.Sum(i => i.Quantity * i.UnitPrice)
-        });
+        return _mapper.Map<IEnumerable<OrderDto>>(orders);
     }
 
-    public async Task<dynamic?> GetOrderByIdAsync(int id)
+    public async Task<OrderDto?> GetOrderByIdAsync(int id)
     {
         var order = await _unitOfWork.Orders.GetByIdAsync(id);
         if (order == null) return null;
-
-        return new
-        {
-            order.Id,
-            order.OrderDate,
-            order.Status,
-            Items = order.Items.Select(i => new
-            {
-                ProductId = i.ProductId,
-                ProductName = i.Product.Name,
-                i.Quantity,
-                i.UnitPrice,
-                TotalPrice = i.Quantity * i.UnitPrice
-            }),
-            TotalAmount = order.Items.Sum(i => i.Quantity * i.UnitPrice)
-        };
+        
+        return _mapper.Map<OrderDto>(order);
     }
 }

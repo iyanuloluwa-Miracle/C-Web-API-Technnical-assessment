@@ -1,5 +1,6 @@
 using Domain.Interfaces;
 using Infrastructure.Persistence;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories;
 

@@ -26,14 +26,16 @@ public class ProductRepository : IProductRepository
         return await _context.Products.ToListAsync();
     }
 
-    public async Task AddAsync(Product product)
+    public Task AddAsync(Product product)
     {
         _context.Products.Add(product);
+        return Task.CompletedTask;
     }
 
-    public async Task UpdateAsync(Product product)
+    public Task UpdateAsync(Product product)
     {
         _context.Products.Update(product);
+        return Task.CompletedTask;
     }
 
     public async Task DeleteAsync(int id)
@@ -48,7 +50,6 @@ public class ProductRepository : IProductRepository
         if (product == null || product.StockQuantity < quantityToSubtract) return false;
 
         product.StockQuantity -= quantityToSubtract;
-        _context.Products.Update(product);
         return true;
     }
 }

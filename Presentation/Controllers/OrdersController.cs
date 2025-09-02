@@ -38,14 +38,14 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult> GetAllOrders()
+    public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllOrders()
     {
         var orders = await _orderService.GetAllOrdersAsync();
         return Ok(orders);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult> GetOrderById(int id)
+    public async Task<ActionResult<OrderDto>> GetOrderById(int id)
     {
         var order = await _orderService.GetOrderByIdAsync(id);
         if (order == null) return NotFound();

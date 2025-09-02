@@ -32,14 +32,16 @@ public class OrderRepository : IOrderRepository
             .ToListAsync();
     }
 
-    public async Task AddAsync(Order order)
+    public Task AddAsync(Order order)
     {
         _context.Orders.Add(order);
+        return Task.CompletedTask;
     }
 
-    public async Task UpdateAsync(Order order)
+    public Task UpdateAsync(Order order)
     {
         _context.Orders.Update(order);
+        return Task.CompletedTask;
     }
 
     public async Task DeleteAsync(int id)
