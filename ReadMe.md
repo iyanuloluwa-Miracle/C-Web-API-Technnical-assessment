@@ -7,11 +7,10 @@ A production-grade C# Web API for managing a product catalog and processing orde
 - **.NET 9.0** - Latest long-term support version
 - **ASP.NET Core** - For building the RESTful API
 - **Entity Framework Core** - ORM for database operations
-- **SQLite** - Lightweight relational database
+- **PostgreSQL** - Production-ready relational database
 - **AutoMapper** - For object-to-object mapping
 - **Swagger/OpenAPI** - API documentation and testing
 - **API Versioning** - For future API version management
-- **xUnit & Moq** - For unit testing
 
 ## Architecture
 
@@ -32,7 +31,7 @@ This solution follows the Clean Architecture principles:
 - **Order Processing**:
   - Place orders with multiple products
   - Validation for sufficient stock
-  - Concurrent stock updates with optimistic concurrency control (using RowVersion)
+  - Concurrent stock updates with optimistic concurrency control (using Version field)
 
 - **Data Integrity**:
   - Prevents overselling through concurrency control
@@ -43,39 +42,62 @@ This solution follows the Clean Architecture principles:
 ### Prerequisites
 
 - .NET 9.0 SDK or later
+- PostgreSQL 12 or later
 - Visual Studio 2022 or JetBrains Rider (recommended)
+
+### Database Setup
+
+1. Install PostgreSQL if not already installed
+2. Create a database named `studybd_db`
+3. Update the connection string in `appsettings.json` if needed:
+
+   ```json
+   {
+     "ConnectionStrings": {
+       "DefaultConnection": "Host=localhost;Port=5432;Database=studybd_db;Username=postgres;Password=your_password"
+     }
+   }
+   ```
 
 ### Running the Application
 
 1. Clone the repository
-   ```
-   git clone https://github.com/yourusername/stackbuld.git
-   cd stackbuld
+
+   ```bash
+   git clone https://github.com/iyanuloluwa-Miracle/TechAssessment-ProductCatalogApi.git
+   cd TechAssessment-ProductCatalogApi
    ```
 
 2. Restore dependencies
-   ```
+
+   ```bash
    dotnet restore
    ```
 
 3. Build the solution
-   ```
+
+   ```bash
    dotnet build
    ```
 
 4. Run the application
-   ```
+
+   ```bash
    dotnet run --project stackbuld.csproj
    ```
 
 5. Open your browser and navigate to:
-   ```
-   https://localhost:5001/swagger/index.html
+
+   ```url
+   https://localhost:7189/swagger/index.html
    ```
 
 ### Running Tests
 
-```
+Currently, no tests are implemented. This would be a good area for future development.
+
+```bash
+# When tests are implemented:
 dotnet test
 ```
 
@@ -97,8 +119,8 @@ dotnet test
 
 ## Design Decisions and Assumptions
 
-- **SQLite Database**: Chosen for simplicity and ease of setup. In a production environment, this could be replaced with PostgreSQL or SQL Server.
-- **Optimistic Concurrency**: Used RowVersion to prevent concurrent updates to stock.
+- **PostgreSQL Database**: Chosen for production-grade reliability and performance. The database is configured to run on localhost with standard PostgreSQL settings.
+- **Optimistic Concurrency**: Used a Version field with ConcurrencyCheck attribute to prevent concurrent updates to stock.
 - **No Authentication/Authorization**: For simplicity, this project does not include authentication. In a production application, JWT or OAuth 2.0 would be implemented.
 - **Minimal Order Entity**: For simplicity, the Order entity only contains essential information. In a production environment, it would include shipping details, payment information, etc.
 - **Error Handling**: Used a global error handling middleware to ensure consistent error responses across the API.
@@ -106,9 +128,9 @@ dotnet test
 ## Improvements for Production
 
 - Add authentication and authorization
+- Implement comprehensive unit and integration tests
 - Implement more comprehensive logging
 - Add database migrations strategy
-- Add integration tests
 - Implement caching strategies
 - Implement rate limiting
 - Add health checks
